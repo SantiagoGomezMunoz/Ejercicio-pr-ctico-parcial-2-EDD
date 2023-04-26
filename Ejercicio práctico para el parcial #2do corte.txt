@@ -1,0 +1,93 @@
+class Palabra:
+  def __init__(self, palabra, significado):
+    self.palabra = palabra
+    self.significado = significado
+#Creamos la clase Palabra, donde se inician los "objetos" palabra y significado de forma individual.
+
+class Nodo:
+  def __init__(self, palabra):
+    self.palabra = palabra
+    self.palabra_obj = None
+    self.izquierda = None
+    self.derecha = None
+#Creamos la clase Nodo, dentro de este nodo nodo... donde "palabra" es la key, "izquierda" es el subárbol izquierdo y 
+#"derecha" es el subárbol derecho 
+
+class Diccionario:
+  def __init__(self):
+    self.palabras = []
+    self.raiz = None
+#Creamos la clase Diccionario, donde las palabras que el usuario digite se guardarán mediante el arreglo "palabras[]"
+#Raíz se puede identificar como un nodo del arbol, el cual está vacío.
+
+  def agregar_palabra(self, palabra, significado):
+    """Agregar una nueva palabra y su significado al diccionario"""
+    nueva_palabra = Palabra(palabra, significado)
+    self.palabras.append(nueva_palabra)
+    nuevo_nodo = Nodo(palabra)
+    nuevo_nodo.palabra_obj = nueva_palabra
+    if self.raiz is None:
+      self.raiz = nuevo_nodo
+    else:
+      actual = self.raiz
+      while True:
+        if palabra < actual.palabra:
+          if actual.izquierda is None:
+            actual.izquierda = nuevo_nodo
+            break
+          else:
+            actual = actual.izquierda
+        else:
+          if actual.derecha is None:
+            actual.derecha = nuevo_nodo
+            break
+          else:
+            actual = actual.derecha
+#Se crea la clase "agregar_palabra", donde como su nombre indica, sirve para que cada palabra que el usuario digite... se guarde
+#junto con su significado además de realizar un filtro donde por un lado del nodo se encuentre la palabra y por el otro lado su significado. 
+
+  def buscar_palabra(self, palabra):
+    """Buscar la palabra en el diccionario y retornar su significado"""
+    actual = self.raiz
+    while actual is not None:
+      if actual.palabra == palabra:
+        return actual.palabra_obj.significado
+      elif palabra < actual.palabra:
+        actual = actual.izquierda
+      else:
+        actual = actual.derecha
+    return "Palabra no encontrada"
+#Se crea la clase "buscar_palabra", donde como su nombre indica, sirve para buscar la palabra que el usuario digitó que previamente
+#se guardó en el método anterior, una vez encontrada la palabra, se retonará su significado.
+
+diccionario = Diccionario()
+
+while True:
+  print("1. Agregar palabra")
+  print("2. Ver diccionario")
+  print("3. Buscar palabra")
+  print("4. Salir")
+
+  opcion = int(input("Ingrese una opción: "))
+
+  if opcion == 1:
+    palabra = input("Ingrese la palabra: ")
+    significado = input("Ingrese el significado: ")
+    diccionario.agregar_palabra(palabra, significado)
+    print("Palabra agregada al diccionario")
+  elif opcion == 2:
+    print("Diccionario:")
+    for palabra in diccionario.palabras:
+      print(palabra.palabra + ": " + palabra.significado)
+  elif opcion == 3:
+    palabra = input("Ingrese la palabra a buscar: ")
+    significado = diccionario.buscar_palabra(palabra)
+    print(significado)
+  elif opcion == 4:
+    print("Saliendo del programa...")
+    break
+  else:
+    print("Opción inválida")
+#Finalmente se crea el menú que el usuario va a manipular, a cada opción se le asigna cada uno de los métodos anteriormente creados
+#Y en caso tal que el usuario digite una opción por fuera de las que ofrece el menú... Saltará un mensaje informándole que su 
+#opción es inválida. 
